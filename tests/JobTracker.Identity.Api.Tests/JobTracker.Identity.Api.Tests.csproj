@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\JobTracker.Identity.Api\JobTracker.Identity.Api.csproj" />
+  </ItemGroup>
+
+</Project>
