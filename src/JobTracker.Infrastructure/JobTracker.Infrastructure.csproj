@@ -4,4 +4,8 @@
     <ProjectReference Include="..\JobTracker.Application\JobTracker.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgsql" />
+  </ItemGroup>
+
 </Project>

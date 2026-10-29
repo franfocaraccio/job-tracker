@@ -52,6 +52,11 @@ public sealed class User
         return new User(Guid.NewGuid(), name.Trim(), normalizedEmail, passwordHash);
     }
 
+    public static User FromDatabase(Guid id, string name, string email, string passwordHash)
+    {
+        return new User(id, name, email, passwordHash);
+    }
+
     public static void ValidatePassword(string password)
     {
         if (string.IsNullOrEmpty(password) || password.Length < MinPasswordLength)
