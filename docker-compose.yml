@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgres:17-alpine
     environment:
+      POSTGRES_DB: jobtracker
       POSTGRES_PASSWORD: jobtracker
     ports:
       - "5432:5432"
