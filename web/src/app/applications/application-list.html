@@ -1,7 +1,49 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h3 mb-0">My applications</h1>
-  <div>
-    <span class="me-3">{{ userName() }}</span>
-    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="logout()">Log out</button>
+<div class="d-flex justify-content-between align-items-center py-4">
+  <p class="fs-2 fw-bold mb-0"><span class="text-success">Job</span>Tracker</p>
+  <div class="d-flex align-items-center gap-3">
+    <span class="small text-body-secondary d-none d-sm-inline">Signed in as {{ userName() }}</span>
+    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="logout()">Log out</button>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-3 p-md-4">
+    <h1 class="h6 fw-semibold mb-1">My applications</h1>
+    <p class="small text-body-secondary mb-4">Keep track of every position you applied to</p>
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger py-2 small">{{ errorMessage() }}</div>
+    }
+
+    @if (applications().length === 0) {
+      <p class="small text-center text-body-secondary py-4 mb-0">You have no applications yet.</p>
+    } @else {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th class="text-uppercase small fw-semibold text-body-secondary">Company</th>
+              <th class="text-uppercase small fw-semibold text-body-secondary d-none d-sm-table-cell">Position</th>
+              <th class="text-uppercase small fw-semibold text-body-secondary">Status</th>
+              <th class="text-uppercase small fw-semibold text-body-secondary d-none d-md-table-cell">Applied on</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (application of applications(); track application.id) {
+              <tr>
+                <td class="fw-semibold">{{ application.company }}</td>
+                <td class="d-none d-sm-table-cell">{{ application.position }}</td>
+                <td><span class="badge rounded-pill border fw-medium" [class]="statusClass(application.status)">{{ application.status }}</span></td>
+                <td class="d-none d-md-table-cell text-body-secondary">{{ application.appliedOn }}</td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-link link-danger" title="Delete" aria-label="Delete" (click)="delete(application)"><i class="bi bi-trash fs-6"></i></button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   </div>
 </div>
