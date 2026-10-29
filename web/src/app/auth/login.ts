@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -29,8 +30,13 @@ export class Login {
       next: () => {
         this.router.navigate(['/applications']);
       },
-      error: () => {
-        this.errorMessage.set('Invalid email or password.');
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.errorMessage.set('Invalid email or password.');
+          return;
+        }
+
+        this.errorMessage.set('Something went wrong. Please try again.');
       },
     });
   }
