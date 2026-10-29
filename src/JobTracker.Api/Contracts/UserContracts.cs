@@ -1,4 +1,4 @@
-namespace JobTracker.Identity.Api.Contracts;
+namespace JobTracker.Api.Contracts;
 
 public sealed record RegisterRequest(string Name, string Email, string Password);
 

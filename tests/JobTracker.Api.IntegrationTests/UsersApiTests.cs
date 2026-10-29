@@ -1,24 +1,24 @@
-using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Net;
+using JobTracker.Api.Contracts;
 using JobTracker.Application.Users;
 using JobTracker.Domain.Users;
-using JobTracker.Identity.Api.Contracts;
 using JobTracker.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 
-namespace JobTracker.Identity.Api.IntegrationTests;
+namespace JobTracker.Api.IntegrationTests;
 
-public sealed class IdentityApiTests : IDisposable
+public sealed class UsersApiTests : IDisposable
 {
     private readonly IUserRepository _repository = Substitute.For<IUserRepository>();
     private readonly WebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
 
-    public IdentityApiTests()
+    public UsersApiTests()
     {
         _factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {

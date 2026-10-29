@@ -1,11 +1,11 @@
 using System.Security.Claims;
+using JobTracker.Api.Contracts;
 using JobTracker.Application.Users;
-using JobTracker.Identity.Api.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 
-namespace JobTracker.Identity.Api.Controllers;
+namespace JobTracker.Api.Controllers;
 
 [ApiController]
 [Authorize]

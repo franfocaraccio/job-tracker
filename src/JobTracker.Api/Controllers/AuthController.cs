@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using JobTracker.Api.Contracts;
 using JobTracker.Application.Users;
-using JobTracker.Identity.Api.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobTracker.Identity.Api.Controllers;
+namespace JobTracker.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]

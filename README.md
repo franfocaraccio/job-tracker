@@ -19,8 +19,9 @@ src/
   JobTracker.Domain               Entities and business rules (no dependencies)
   JobTracker.Application          Use cases and abstractions (depends on Domain)
   JobTracker.Infrastructure       PostgreSQL repositories, hashing, JWT (depends on Application)
-  JobTracker.Identity.Api         User API: register, login, current user — issues JWTs
-  JobTracker.Applications.Api     Job applications CRUD API — validates JWTs
+  JobTracker.Api                  ASP.NET Core Web API: users API (register, login, current user)
+                                  and job applications API (CRUD)
 tests/
-  JobTracker.*.Tests              One test project per production project
+  JobTracker.*.Tests              Unit tests
+  JobTracker.*.IntegrationTests   Integration tests (PostgreSQL via Testcontainers, API in memory)
 ```

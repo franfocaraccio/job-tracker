@@ -1,11 +1,11 @@
-using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
+using System.Net;
 using System.Text.Json.Serialization;
+using System.Text.Json;
+using JobTracker.Api.Contracts;
 using JobTracker.Application.JobApplications;
 using JobTracker.Application.Users;
-using JobTracker.Applications.Api.Contracts;
 using JobTracker.Domain.JobApplications;
 using JobTracker.Domain.Users;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 
-namespace JobTracker.Applications.Api.IntegrationTests;
+namespace JobTracker.Api.IntegrationTests;
 
-public sealed class ApplicationsApiTests : IDisposable
+public sealed class JobApplicationsApiTests : IDisposable
 {
     private static readonly DateOnly Today = DateOnly.FromDateTime(DateTime.UtcNow);
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
@@ -28,7 +28,7 @@ public sealed class ApplicationsApiTests : IDisposable
     private readonly HttpClient _client;
     private readonly User _user = User.Create("Demo User", "demo@jobtracker.com", "hashed-password");
 
-    public ApplicationsApiTests()
+    public JobApplicationsApiTests()
     {
         _factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {

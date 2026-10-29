@@ -1,6 +1,6 @@
 using JobTracker.Domain.JobApplications;
 
-namespace JobTracker.Applications.Api.Contracts;
+namespace JobTracker.Api.Contracts;
 
 public sealed record CreateJobApplicationRequest(string Company, string Position, DateOnly AppliedOn);
 
