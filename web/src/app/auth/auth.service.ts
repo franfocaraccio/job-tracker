@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { apiUrl } from '../api';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: string;
@@ -23,11 +23,11 @@ export class AuthService {
   private readonly http = inject(HttpClient);
 
   register(name: string, email: string, password: string): Observable<User> {
-    return this.http.post<User>(`${apiUrl}/auth/register`, { name, email, password });
+    return this.http.post<User>(`${environment.apiUrl}/auth/register`, { name, email, password });
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${apiUrl}/auth/login`, { email, password }).pipe(
+    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { email, password }).pipe(
       tap((response) => {
         localStorage.setItem(tokenKey, response.accessToken);
       }),
@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   getCurrentUser(): Observable<User> {
-    return this.http.get<User>(`${apiUrl}/users/me`);
+    return this.http.get<User>(`${environment.apiUrl}/users/me`);
   }
 
   logout(): void {

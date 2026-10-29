@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { apiUrl } from '../api';
+import { environment } from '../../environments/environment';
 
 export type ApplicationStatus = 'Applied' | 'Interviewing' | 'Offer' | 'Accepted' | 'Rejected';
 
@@ -34,22 +34,22 @@ export class JobApplicationService {
   private readonly http = inject(HttpClient);
 
   getAll(): Observable<JobApplication[]> {
-    return this.http.get<JobApplication[]>(`${apiUrl}/applications`);
+    return this.http.get<JobApplication[]>(`${environment.apiUrl}/applications`);
   }
 
   getById(id: string): Observable<JobApplication> {
-    return this.http.get<JobApplication>(`${apiUrl}/applications/${id}`);
+    return this.http.get<JobApplication>(`${environment.apiUrl}/applications/${id}`);
   }
 
   create(request: CreateJobApplicationRequest): Observable<JobApplication> {
-    return this.http.post<JobApplication>(`${apiUrl}/applications`, request);
+    return this.http.post<JobApplication>(`${environment.apiUrl}/applications`, request);
   }
 
   update(id: string, request: UpdateJobApplicationRequest): Observable<JobApplication> {
-    return this.http.put<JobApplication>(`${apiUrl}/applications/${id}`, request);
+    return this.http.put<JobApplication>(`${environment.apiUrl}/applications/${id}`, request);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${apiUrl}/applications/${id}`);
+    return this.http.delete<void>(`${environment.apiUrl}/applications/${id}`);
   }
 }
