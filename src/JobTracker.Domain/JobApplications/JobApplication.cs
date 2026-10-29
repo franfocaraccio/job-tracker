@@ -37,14 +37,14 @@ public sealed class JobApplication
 
     public DateOnly AppliedOn { get; private set; }
 
-    public static JobApplication Create(Guid userId, string company, string position, DateOnly appliedOn, DateOnly today)
+    public static JobApplication Create(Guid userId, string company, string position, DateOnly appliedOn)
     {
         if (userId == Guid.Empty)
         {
             throw new ValidationException("An application must belong to a user.");
         }
 
-        ValidateDetails(company, position, appliedOn, today);
+        ValidateDetails(company, position, appliedOn);
 
         return new JobApplication(
             Guid.NewGuid(),
@@ -55,9 +55,9 @@ public sealed class JobApplication
             appliedOn);
     }
 
-    public void UpdateDetails(string company, string position, DateOnly appliedOn, DateOnly today)
+    public void UpdateDetails(string company, string position, DateOnly appliedOn)
     {
-        ValidateDetails(company, position, appliedOn, today);
+        ValidateDetails(company, position, appliedOn);
 
         Company = company.Trim();
         Position = position.Trim();
@@ -74,11 +74,12 @@ public sealed class JobApplication
         Status = newStatus;
     }
 
-    private static void ValidateDetails(string company, string position, DateOnly appliedOn, DateOnly today)
+    private static void ValidateDetails(string company, string position, DateOnly appliedOn)
     {
         ValidateText(company, "Company");
         ValidateText(position, "Position");
 
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
         if (appliedOn > today)
         {
             throw new ValidationException("The application date cannot be in the future.");

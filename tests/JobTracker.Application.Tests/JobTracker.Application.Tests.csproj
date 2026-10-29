@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\JobTracker.Application\JobTracker.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NSubstitute" />
+  </ItemGroup>
+
 </Project>

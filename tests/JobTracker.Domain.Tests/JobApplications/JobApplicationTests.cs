@@ -6,12 +6,12 @@ namespace JobTracker.Domain.Tests.JobApplications;
 public class JobApplicationTests
 {
     private static readonly Guid UserId = Guid.NewGuid();
-    private static readonly DateOnly Today = new(2026, 10, 28);
+    private static readonly DateOnly Today = DateOnly.FromDateTime(DateTime.UtcNow);
 
     [Fact]
     public void Create_WithValidData_StartsInAppliedStatus()
     {
-        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today, Today);
+        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today);
 
         Assert.NotEqual(Guid.Empty, application.Id);
         Assert.Equal(UserId, application.UserId);
@@ -24,7 +24,7 @@ public class JobApplicationTests
     [Fact]
     public void Create_TrimsCompanyAndPosition()
     {
-        var application = JobApplication.Create(UserId, "  Ballast Lane ", " .NET Developer  ", Today, Today);
+        var application = JobApplication.Create(UserId, "  Ballast Lane ", " .NET Developer  ", Today);
 
         Assert.Equal("Ballast Lane", application.Company);
         Assert.Equal(".NET Developer", application.Position);
@@ -34,7 +34,7 @@ public class JobApplicationTests
     public void Create_WithEmptyUserId_ThrowsValidationError()
     {
         var exception = Assert.Throws<ValidationException>(
-            () => JobApplication.Create(Guid.Empty, "Ballast Lane", ".NET Developer", Today, Today));
+            () => JobApplication.Create(Guid.Empty, "Ballast Lane", ".NET Developer", Today));
 
         Assert.Equal("An application must belong to a user.", exception.Message);
     }
@@ -45,7 +45,7 @@ public class JobApplicationTests
     public void Create_WithBlankCompany_ThrowsValidationError(string company)
     {
         var exception = Assert.Throws<ValidationException>(
-            () => JobApplication.Create(UserId, company, ".NET Developer", Today, Today));
+            () => JobApplication.Create(UserId, company, ".NET Developer", Today));
 
         Assert.Equal("Company is required.", exception.Message);
     }
@@ -56,7 +56,7 @@ public class JobApplicationTests
     public void Create_WithBlankPosition_ThrowsValidationError(string position)
     {
         var exception = Assert.Throws<ValidationException>(
-            () => JobApplication.Create(UserId, "Ballast Lane", position, Today, Today));
+            () => JobApplication.Create(UserId, "Ballast Lane", position, Today));
 
         Assert.Equal("Position is required.", exception.Message);
     }
@@ -67,7 +67,7 @@ public class JobApplicationTests
         var company = new string('a', JobApplication.MaxTextLength + 1);
 
         var exception = Assert.Throws<ValidationException>(
-            () => JobApplication.Create(UserId, company, ".NET Developer", Today, Today));
+            () => JobApplication.Create(UserId, company, ".NET Developer", Today));
 
         Assert.Equal("Company must be 100 characters or fewer.", exception.Message);
     }
@@ -78,7 +78,7 @@ public class JobApplicationTests
         var position = new string('a', JobApplication.MaxTextLength + 1);
 
         var exception = Assert.Throws<ValidationException>(
-            () => JobApplication.Create(UserId, "Ballast Lane", position, Today, Today));
+            () => JobApplication.Create(UserId, "Ballast Lane", position, Today));
 
         Assert.Equal("Position must be 100 characters or fewer.", exception.Message);
     }
@@ -88,7 +88,7 @@ public class JobApplicationTests
     {
         var text = new string('a', JobApplication.MaxTextLength);
 
-        var application = JobApplication.Create(UserId, text, text, Today, Today);
+        var application = JobApplication.Create(UserId, text, text, Today);
 
         Assert.Equal(text, application.Company);
         Assert.Equal(text, application.Position);
@@ -98,7 +98,7 @@ public class JobApplicationTests
     public void Create_WithFutureAppliedOn_ThrowsValidationError()
     {
         var exception = Assert.Throws<ValidationException>(
-            () => JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today.AddDays(1), Today));
+            () => JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today.AddDays(1)));
 
         Assert.Equal("The application date cannot be in the future.", exception.Message);
     }
@@ -106,9 +106,9 @@ public class JobApplicationTests
     [Fact]
     public void UpdateDetails_WithValidData_UpdatesFields()
     {
-        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today, Today);
+        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today);
 
-        application.UpdateDetails(" Google ", " Senior .NET Developer ", Today.AddDays(-3), Today);
+        application.UpdateDetails(" Google ", " Senior .NET Developer ", Today.AddDays(-3));
 
         Assert.Equal("Google", application.Company);
         Assert.Equal("Senior .NET Developer", application.Position);
@@ -118,10 +118,10 @@ public class JobApplicationTests
     [Fact]
     public void UpdateDetails_WithInvalidData_ThrowsAndKeepsOriginalValues()
     {
-        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today, Today);
+        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today);
 
         Assert.Throws<ValidationException>(
-            () => application.UpdateDetails("", ".NET Developer", Today, Today));
+            () => application.UpdateDetails("", ".NET Developer", Today));
 
         Assert.Equal("Ballast Lane", application.Company);
         Assert.Equal(".NET Developer", application.Position);
@@ -131,7 +131,7 @@ public class JobApplicationTests
     [Fact]
     public void ChangeStatus_ToAllowedStatus_UpdatesStatus()
     {
-        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today, Today);
+        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today);
 
         application.ChangeStatus(ApplicationStatus.Interviewing);
 
@@ -141,7 +141,7 @@ public class JobApplicationTests
     [Fact]
     public void ChangeStatus_ToDisallowedStatus_ThrowsAndKeepsCurrentStatus()
     {
-        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today, Today);
+        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today);
 
         var exception = Assert.Throws<ValidationException>(
             () => application.ChangeStatus(ApplicationStatus.Accepted));
