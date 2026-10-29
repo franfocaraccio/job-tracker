@@ -17,12 +17,12 @@
         <form [formGroup]="form" (ngSubmit)="submit()">
           <div class="mb-3">
             <label class="form-label small fw-semibold" for="company">Company</label>
-            <input id="company" class="form-control rounded-pill" placeholder="Ballast Lane" formControlName="company" />
+            <input id="company" class="form-control rounded-pill" formControlName="company" />
           </div>
 
           <div class="mb-3">
             <label class="form-label small fw-semibold" for="position">Position</label>
-            <input id="position" class="form-control rounded-pill" placeholder=".NET Developer" formControlName="position" />
+            <input id="position" class="form-control rounded-pill" formControlName="position" />
           </div>
 
           <div class="mb-3">
