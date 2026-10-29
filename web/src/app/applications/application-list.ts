@@ -1,14 +1,15 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { ApplicationForm } from './application-form';
 import { ApplicationStatus, JobApplication, JobApplicationService } from './job-application.service';
 
 /**
- * Main page for the signed-in user: lists their job applications and links to create, edit or delete them.
+ * Main page for the signed-in user: lists their job applications and opens the modals to create, edit or delete them.
  */
 @Component({
   selector: 'app-application-list',
-  imports: [RouterLink],
+  imports: [ApplicationForm],
   templateUrl: './application-list.html',
 })
 export class ApplicationList implements OnInit {
@@ -20,6 +21,9 @@ export class ApplicationList implements OnInit {
   protected readonly applications = signal<JobApplication[]>([]);
   protected readonly loaded = signal(false);
   protected readonly errorMessage = signal('');
+  protected readonly formOpen = signal(false);
+  protected readonly editingId = signal<string | null>(null);
+  protected readonly applicationToDelete = signal<JobApplication | null>(null);
 
   ngOnInit(): void {
     this.authService.getCurrentUser().subscribe((user) => {
@@ -29,11 +33,26 @@ export class ApplicationList implements OnInit {
     this.loadApplications();
   }
 
-  protected delete(application: JobApplication): void {
-    if (!confirm(`Delete the application to ${application.company}?`)) {
+  protected openForm(id: string | null): void {
+    this.editingId.set(id);
+    this.formOpen.set(true);
+  }
+
+  protected closeForm(saved: boolean): void {
+    this.formOpen.set(false);
+
+    if (saved) {
+      this.loadApplications();
+    }
+  }
+
+  protected confirmDelete(): void {
+    const application = this.applicationToDelete();
+    if (application === null) {
       return;
     }
 
+    this.applicationToDelete.set(null);
     this.jobApplicationService.delete(application.id).subscribe({
       next: () => {
         this.loadApplications();

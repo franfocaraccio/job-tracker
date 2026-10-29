@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { ApplicationForm } from './application-form';
 import { ApplicationStatus, JobApplicationService } from './job-application.service';
@@ -9,8 +8,6 @@ describe('ApplicationForm', () => {
     TestBed.configureTestingModule({
       imports: [ApplicationForm],
       providers: [
-        provideRouter([]),
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap(id === null ? {} : { id }) } } },
         {
           provide: JobApplicationService,
           useValue: {
@@ -21,6 +18,7 @@ describe('ApplicationForm', () => {
     });
 
     const fixture = TestBed.createComponent(ApplicationForm);
+    fixture.componentRef.setInput('applicationId', id);
     await fixture.whenStable();
     return fixture.nativeElement as HTMLElement;
   }

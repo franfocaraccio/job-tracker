@@ -1,10 +1,8 @@
-<div class="row min-vh-100 align-items-center justify-content-center">
-  <div class="col-sm-10 col-md-8 col-lg-5">
-    <p class="text-center fs-2 fw-bold mb-3"><span class="text-success">Job</span>Tracker</p>
-
-    <div class="card border-0 shadow-sm rounded-4">
-      <div class="card-body p-4">
-        @if (id === null) {
+<div class="modal d-block" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      <div class="modal-body p-4">
+        @if (applicationId() === null) {
           <h1 class="h6 fw-semibold mb-1">New application</h1>
           <p class="small text-body-secondary mb-4">Add a position you applied to</p>
         } @else {
@@ -32,7 +30,7 @@
             <input id="appliedOn" type="date" class="form-control rounded-pill" [max]="today" formControlName="appliedOn" />
           </div>
 
-          @if (id !== null) {
+          @if (applicationId() !== null) {
             <div class="mb-3">
               <label class="form-label small fw-semibold" for="status">Status</label>
               <select id="status" class="form-select rounded-pill" formControlName="status">
@@ -44,7 +42,7 @@
           }
 
           <div class="d-flex gap-2 mt-4">
-            <a routerLink="/applications" class="btn btn-outline-secondary rounded-pill w-50">Cancel</a>
+            <button type="button" class="btn btn-outline-secondary rounded-pill w-50" (click)="cancelled.emit()">Cancel</button>
             <button type="submit" class="btn btn-success rounded-pill w-50" [disabled]="form.invalid">Save</button>
           </div>
         </form>
@@ -52,3 +50,4 @@
     </div>
   </div>
 </div>
+<div class="modal-backdrop show"></div>

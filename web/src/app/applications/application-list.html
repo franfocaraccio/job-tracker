@@ -13,9 +13,9 @@
         <h1 class="h6 fw-semibold mb-1">My applications</h1>
         <p class="small text-body-secondary mb-0">Keep track of every position you applied to</p>
       </div>
-      <a routerLink="/applications/new" class="btn btn-success btn-sm rounded-pill px-3 text-nowrap">
+      <button type="button" class="btn btn-success btn-sm rounded-pill px-3 text-nowrap" (click)="openForm(null)">
         <i class="bi bi-plus-lg"></i> New application
-      </a>
+      </button>
     </div>
 
     @if (errorMessage()) {
@@ -44,8 +44,8 @@
                 <td><span class="badge rounded-pill border fw-medium" [class]="statusClass(application.status)">{{ application.status }}</span></td>
                 <td class="d-none d-md-table-cell text-body-secondary">{{ application.appliedOn }}</td>
                 <td class="text-end">
-                  <a [routerLink]="['/applications', application.id, 'edit']" class="btn btn-sm btn-link link-secondary" title="Edit" aria-label="Edit"><i class="bi bi-pencil fs-6"></i></a>
-                  <button type="button" class="btn btn-sm btn-link link-danger" title="Delete" aria-label="Delete" (click)="delete(application)"><i class="bi bi-trash fs-6"></i></button>
+                  <button type="button" class="btn btn-sm btn-link link-secondary" title="Edit" aria-label="Edit" (click)="openForm(application.id)"><i class="bi bi-pencil fs-6"></i></button>
+                  <button type="button" class="btn btn-sm btn-link link-danger" title="Delete" aria-label="Delete" (click)="applicationToDelete.set(application)"><i class="bi bi-trash fs-6"></i></button>
                 </td>
               </tr>
             }
@@ -55,3 +55,25 @@
     }
   </div>
 </div>
+
+@if (formOpen()) {
+  <app-application-form [applicationId]="editingId()" (saved)="closeForm(true)" (cancelled)="closeForm(false)" />
+}
+
+@if (applicationToDelete(); as application) {
+  <div class="modal d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content border-0 shadow rounded-4">
+        <div class="modal-body p-4">
+          <h1 class="h6 fw-semibold mb-1">Delete application</h1>
+          <p class="small text-body-secondary mb-4">Delete the application to {{ application.company }}? This cannot be undone.</p>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary rounded-pill w-50" (click)="applicationToDelete.set(null)">Cancel</button>
+            <button type="button" class="btn btn-danger rounded-pill w-50" (click)="confirmDelete()">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop show"></div>
+}

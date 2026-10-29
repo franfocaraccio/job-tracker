@@ -1,8 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, input, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApplicationStatus, JobApplicationService } from './job-application.service';
 
 const nextStatuses: Record<ApplicationStatus, ApplicationStatus[]> = {
@@ -14,19 +13,20 @@ const nextStatuses: Record<ApplicationStatus, ApplicationStatus[]> = {
 };
 
 /**
- * Page to create a new job application or edit an existing one (when the URL has an id).
+ * Modal to create a new job application or edit an existing one (when it receives an id).
  */
 @Component({
   selector: 'app-application-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './application-form.html',
 })
 export class ApplicationForm implements OnInit {
   private readonly jobApplicationService = inject(JobApplicationService);
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
 
-  protected readonly id = this.route.snapshot.paramMap.get('id');
+  readonly applicationId = input<string | null>(null);
+  readonly saved = output();
+  readonly cancelled = output();
+
   protected readonly today = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
   protected readonly statusOptions = signal<ApplicationStatus[]>([]);
   protected readonly errorMessage = signal('');
@@ -39,11 +39,12 @@ export class ApplicationForm implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.id === null) {
+    const id = this.applicationId();
+    if (id === null) {
       return;
     }
 
-    this.jobApplicationService.getById(this.id).subscribe({
+    this.jobApplicationService.getById(id).subscribe({
       next: (application) => {
         this.form.setValue({
           company: application.company,
@@ -54,18 +55,19 @@ export class ApplicationForm implements OnInit {
         this.statusOptions.set([application.status, ...nextStatuses[application.status]]);
       },
       error: () => {
-        this.router.navigate(['/applications']);
+        this.errorMessage.set('The application could not be loaded.');
       },
     });
   }
 
   protected submit(): void {
+    const id = this.applicationId();
     const { company, position, appliedOn, status } = this.form.getRawValue();
 
-    if (this.id === null) {
+    if (id === null) {
       this.jobApplicationService.create({ company, position, appliedOn }).subscribe({
         next: () => {
-          this.router.navigate(['/applications']);
+          this.saved.emit();
         },
         error: (error: HttpErrorResponse) => {
           this.showError(error);
@@ -74,9 +76,9 @@ export class ApplicationForm implements OnInit {
       return;
     }
 
-    this.jobApplicationService.update(this.id, { company, position, appliedOn, status }).subscribe({
+    this.jobApplicationService.update(id, { company, position, appliedOn, status }).subscribe({
       next: () => {
-        this.router.navigate(['/applications']);
+        this.saved.emit();
       },
       error: (error: HttpErrorResponse) => {
         this.showError(error);
