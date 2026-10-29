@@ -481,11 +481,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-# --- Angular / Node (web/) ---
-web/node_modules/
-web/dist/
-web/.angular/
-web/coverage/
 
 # --- Local environment ---
 .env
