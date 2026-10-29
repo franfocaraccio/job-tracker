@@ -47,15 +47,4 @@ public class ApplicationStatusTests
     {
         Assert.False(status.CanTransitionTo(status));
     }
-
-    [Theory]
-    [InlineData(ApplicationStatus.Accepted, true)]
-    [InlineData(ApplicationStatus.Rejected, true)]
-    [InlineData(ApplicationStatus.Applied, false)]
-    [InlineData(ApplicationStatus.Interviewing, false)]
-    [InlineData(ApplicationStatus.Offer, false)]
-    public void IsFinal_ReturnsWhetherTheProcessIsClosed(ApplicationStatus status, bool expected)
-    {
-        Assert.Equal(expected, status.IsFinal());
-    }
 }

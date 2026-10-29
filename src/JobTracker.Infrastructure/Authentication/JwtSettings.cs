@@ -1,7 +1,7 @@
 namespace JobTracker.Infrastructure.Authentication;
 
 /// <summary>
-/// JWT configuration shared by the API that issues tokens and the API that validates them.
+/// JWT configuration used to issue tokens on login and to validate them on protected endpoints.
 /// </summary>
 public sealed class JwtSettings
 {

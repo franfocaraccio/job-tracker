@@ -90,6 +90,11 @@ public sealed class JobApplication
         ValidateText(company, "Company");
         ValidateText(position, "Position");
 
+        if (appliedOn == default)
+        {
+            throw new ValidationException("The application date is required.");
+        }
+
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         if (appliedOn > today)
         {

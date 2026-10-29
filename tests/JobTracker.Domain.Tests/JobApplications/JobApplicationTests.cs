@@ -104,6 +104,15 @@ public class JobApplicationTests
     }
 
     [Fact]
+    public void Create_WithoutAppliedOn_ThrowsValidationError()
+    {
+        var exception = Assert.Throws<ValidationException>(
+            () => JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", default));
+
+        Assert.Equal("The application date is required.", exception.Message);
+    }
+
+    [Fact]
     public void UpdateDetails_WithValidData_UpdatesFields()
     {
         var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today);

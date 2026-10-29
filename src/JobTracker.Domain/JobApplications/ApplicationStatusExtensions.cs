@@ -24,14 +24,4 @@ public static class ApplicationStatusExtensions
 
         return false;
     }
-
-    public static bool IsFinal(this ApplicationStatus status)
-    {
-        if (status == ApplicationStatus.Accepted || status == ApplicationStatus.Rejected)
-        {
-            return true;
-        }
-
-        return false;
-    }
 }
