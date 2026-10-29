@@ -55,6 +55,17 @@ public sealed class JobApplication
             appliedOn);
     }
 
+    public static JobApplication FromDatabase(
+        Guid id,
+        Guid userId,
+        string company,
+        string position,
+        ApplicationStatus status,
+        DateOnly appliedOn)
+    {
+        return new JobApplication(id, userId, company, position, status, appliedOn);
+    }
+
     public void UpdateDetails(string company, string position, DateOnly appliedOn)
     {
         ValidateDetails(company, position, appliedOn);
