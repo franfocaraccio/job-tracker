@@ -98,9 +98,17 @@ public class JobApplicationTests
     public void Create_WithFutureAppliedOn_ThrowsValidationError()
     {
         var exception = Assert.Throws<ValidationException>(
-            () => JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today.AddDays(1)));
+            () => JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today.AddDays(2)));
 
         Assert.Equal("The application date cannot be in the future.", exception.Message);
+    }
+
+    [Fact]
+    public void Create_WithTomorrowInUtc_Succeeds()
+    {
+        var application = JobApplication.Create(UserId, "Ballast Lane", ".NET Developer", Today.AddDays(1));
+
+        Assert.Equal(Today.AddDays(1), application.AppliedOn);
     }
 
     [Fact]

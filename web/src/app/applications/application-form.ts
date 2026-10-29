@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -26,7 +27,7 @@ export class ApplicationForm implements OnInit {
   private readonly router = inject(Router);
 
   protected readonly id = this.route.snapshot.paramMap.get('id');
-  protected readonly today = new Date().toISOString().slice(0, 10);
+  protected readonly today = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
   protected readonly statusOptions = signal<ApplicationStatus[]>([]);
   protected readonly errorMessage = signal('');
 

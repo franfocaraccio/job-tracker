@@ -96,7 +96,7 @@ public sealed class JobApplication
         }
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        if (appliedOn > today)
+        if (appliedOn > today.AddDays(1))
         {
             throw new ValidationException("The application date cannot be in the future.");
         }

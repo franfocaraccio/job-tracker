@@ -63,7 +63,7 @@ public class JobApplicationServiceTests
     public async Task CreateAsync_WithFutureDate_ThrowsAndDoesNotSave()
     {
         await Assert.ThrowsAsync<ValidationException>(
-            () => _service.CreateAsync(UserId, "Ballast Lane", ".NET Developer", Today.AddDays(1), CancellationToken.None));
+            () => _service.CreateAsync(UserId, "Ballast Lane", ".NET Developer", Today.AddDays(2), CancellationToken.None));
 
         await _repository.DidNotReceive().AddAsync(Arg.Any<JobApplication>(), Arg.Any<CancellationToken>());
     }

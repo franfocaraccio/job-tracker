@@ -92,7 +92,7 @@ public sealed class JobApplicationsApiTests : IDisposable
     public async Task Create_WithFutureDate_Returns400()
     {
         var response = await _client.PostAsJsonAsync(
-            "/api/applications", new CreateJobApplicationRequest("Ballast Lane", ".NET Developer", Today.AddDays(1)), JsonOptions);
+            "/api/applications", new CreateJobApplicationRequest("Ballast Lane", ".NET Developer", Today.AddDays(2)), JsonOptions);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
