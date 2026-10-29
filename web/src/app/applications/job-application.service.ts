@@ -13,6 +13,19 @@ export interface JobApplication {
   appliedOn: string;
 }
 
+export interface CreateJobApplicationRequest {
+  company: string;
+  position: string;
+  appliedOn: string;
+}
+
+export interface UpdateJobApplicationRequest {
+  company: string;
+  position: string;
+  appliedOn: string;
+  status: ApplicationStatus;
+}
+
 /**
  * Calls the job applications API of the signed-in user.
  */
@@ -22,6 +35,18 @@ export class JobApplicationService {
 
   getAll(): Observable<JobApplication[]> {
     return this.http.get<JobApplication[]>(`${apiUrl}/applications`);
+  }
+
+  getById(id: string): Observable<JobApplication> {
+    return this.http.get<JobApplication>(`${apiUrl}/applications/${id}`);
+  }
+
+  create(request: CreateJobApplicationRequest): Observable<JobApplication> {
+    return this.http.post<JobApplication>(`${apiUrl}/applications`, request);
+  }
+
+  update(id: string, request: UpdateJobApplicationRequest): Observable<JobApplication> {
+    return this.http.put<JobApplication>(`${apiUrl}/applications/${id}`, request);
   }
 
   delete(id: string): Observable<void> {
