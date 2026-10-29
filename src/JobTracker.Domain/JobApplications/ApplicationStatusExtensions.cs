@@ -10,7 +10,22 @@ public static class ApplicationStatusExtensions
     /// </summary>
     public static bool CanTransitionTo(this ApplicationStatus current, ApplicationStatus next)
     {
-        throw new NotImplementedException();
+        if (current == ApplicationStatus.Applied)
+        {
+            return next == ApplicationStatus.Interviewing || next == ApplicationStatus.Rejected;
+        }
+
+        if (current == ApplicationStatus.Interviewing)
+        {
+            return next == ApplicationStatus.Offer || next == ApplicationStatus.Rejected;
+        }
+
+        if (current == ApplicationStatus.Offer)
+        {
+            return next == ApplicationStatus.Accepted || next == ApplicationStatus.Rejected;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -18,6 +33,11 @@ public static class ApplicationStatusExtensions
     /// </summary>
     public static bool IsFinal(this ApplicationStatus status)
     {
-        throw new NotImplementedException();
+        if (status == ApplicationStatus.Accepted || status == ApplicationStatus.Rejected)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
